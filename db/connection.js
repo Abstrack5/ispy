@@ -8,7 +8,7 @@ const db = mysql.createConnection(
     host: 'localhost',
     user: user,
     password: pw,
-    // database: 'the_office'
+    database: 'the_office'
     },
 
     console.log(`You're successfully connected to The Office Database!`)
