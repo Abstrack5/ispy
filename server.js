@@ -61,7 +61,7 @@ const promptUser = () => {
 }; 
 
 
-
+module.exports = { promptUser };
 
 db.connect((err) => {
     if (err) throw err;
