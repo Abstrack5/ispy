@@ -4,14 +4,14 @@ const config = require('config');
 const user = config.get("server.user");
 const pw = config.get("server.password");
 
-const connection = mysql.createConnection({
+const server = mysql.createserver({
     host: 'localhost',
     user: user,
     password: pw,
     database: 'the_office'
 });
 
-connection.connect(err => {
+server.connect(err => {
     if (err) throw err;
     console.log(`>You are now connected to "The Office" database<`);
     promptUser();
@@ -52,7 +52,7 @@ const promptUser = () => {
                     viewEmployee();
                     break;
                     default:
-                        connection.end();
+                        server.end();
             }
         })
 }
@@ -62,7 +62,7 @@ viewDepartments = () => {
     const sql = `SELECT department.id, department.name AS department
                 FROM department`;
 
-    connection.query(sql, (err, rows) => {
+    server.query(sql, (err, rows) => {
         if(err) throw err;
         console.table(rows);
         promptUser();
@@ -73,7 +73,7 @@ viewRoles = () => {
     console.log('Viewing all roles... ');
     const sql = `SELECT * FROM roles`;
 
-    connection.query(sql, (err, rows) => {
+    server.query(sql, (err, rows) => {
         if (err) throw err;
         console.table(rows);
         promptUser();
@@ -84,7 +84,7 @@ viewEmployee = () => {
     console.log('Viewing all Employees... ');
     const sql = `SELECT * FROM employee`;
 
-    connection.query(sql, (err, rows) => {
+    server.query(sql, (err, rows) => {
         if (err) throw err;
         console.table(rows);
         promptUser();
