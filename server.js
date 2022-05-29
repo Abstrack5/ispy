@@ -60,6 +60,9 @@ const promptUser = () => {
                 case 'Add an employee':
                     addEmployee();
                     break;
+                case 'Update an Employee role':
+                    updateEmployeeRole();
+                    break;
                     default:
                         console.log('+==============================================+');
                         console.log('|                     BYE                      |');
@@ -70,7 +73,7 @@ const promptUser = () => {
 }
 
 
-// --------------------------------- View Functions --------------------------------------- \\
+// --------------------------------- || View Functions || --------------------------------------- \\
 viewDepartments = () => {
     console.log('Viewing all departments..');
     const sql = `SELECT department.id, department.name AS department
@@ -127,7 +130,7 @@ viewEmployee = () => {
 };
 
 
-// ---------------------------------- Add Functions --------------------------------------- \\
+// ---------------------------------- || Add Functions || --------------------------------------- \\
 addDepartment = () => {
     inquirer.prompt([
         {
@@ -275,4 +278,10 @@ addEmployee = () => {
             }
         })
     })
+};
+
+
+// ---------------------------------- || Update Functions || --------------------------------------- \\
+updateEmployeeRole = () => {
+    console.log('In progress');
 };
