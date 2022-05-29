@@ -51,19 +51,30 @@ const promptUser = () => {
                 case "View all employees":
                     viewEmployee();
                     break;
+                case "Add a department":
+                    addDepartment();
+                    break;
                     default:
+                        console.log('+==============================================+');
+                        console.log('|                     BYE                      |');
+                        console.log('+==============================================+');
                         server.end();
             }
         })
 }
 
+
+// --------------------------------- View Functions --------------------------------------- \\
 viewDepartments = () => {
     console.log('Viewing all departments..');
     const sql = `SELECT department.id, department.name AS department
                 FROM department`;
 
     server.query(sql, (err, rows) => {
-        if(err) throw err;
+        if(err) {
+            console.log(err.message);
+            return;
+        }
         console.table(rows);
         promptUser();
     });
@@ -77,7 +88,10 @@ viewRoles = () => {
                 ON roles.department_id = department.id`;
 
     server.query(sql, (err, rows) => {
-        if (err) throw err;
+        if(err) {
+            console.log(err.message);
+            return;
+        }
         console.table(rows);
         promptUser();
     });
@@ -86,18 +100,46 @@ viewRoles = () => {
 viewEmployee = () => {
     console.log('Viewing all Employees... ');
     const sql = `SELECT employee.id, employee.first_name, employee.last_name, roles.salary, roles.title AS job_title, department.name AS department,
-                m.last_name AS manager
+                boss.last_name AS manager
                 FROM employee
                 LEFT JOIN roles 
                 ON employee.role_id = roles.id
                 LEFT JOIN department
                 ON roles.department_id = department.id
-                LEFT JOIN employee AS m
-                ON m.id = employee.manager_id`;
+                LEFT JOIN employee AS boss
+                ON boss.id = employee.manager_id`;
 
     server.query(sql, (err, rows) => {
-        if (err) throw err;
+        if(err) {
+            console.log(err.message);
+            return;
+        }
         console.table(rows);
         promptUser();
     });
+};
+
+
+// ---------------------------------- Add Functions --------------------------------------- \\
+addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: 'text',
+            name: 'newDepartment',
+            message: 'What is the name of the new department?'
+        }
+    ])
+    .then((data) => {
+        const sql = `INSERT INTO department (name)
+                VALUES (?)`
+        server.query(sql, data.newDepartment, (err, results) =>{
+            if(err) {
+                console.log(err.message);
+                return;
+            }
+            console.log('Successfully added new department!');
+            promptUser();
+        });
+    });
+
 };
