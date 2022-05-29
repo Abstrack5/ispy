@@ -4,7 +4,7 @@ const config = require('config');
 const user = config.get("server.user");
 const pw = config.get("server.password");
 
-const server = mysql.createserver({
+const server = mysql.createConnection({
     host: 'localhost',
     user: user,
     password: pw,
