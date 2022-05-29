@@ -1,7 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const config = require("config");
-const { listenerCount } = require("process");
 const user = config.get("server.user");
 const pw = config.get("server.password");
 
@@ -341,7 +340,7 @@ updateEmployeeRole = () => {
                         console.log(err.message)
                         return;
                     } else {
-                        console.log('Sucesss!')
+                        console.log('Sucesssfully updated employee role!')
                         promptUser();
                     }
                 })
