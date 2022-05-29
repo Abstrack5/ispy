@@ -40,19 +40,22 @@ const promptUser = () => {
                     'Exit']
         }
     ])
-        .then((response) => {
-            switch (response.start) {
-                case "View all departments":
+        .then((data) => {
+            switch (data.start) {
+                case 'View all departments':
                     viewDepartments();
                     break;
-                case "View all roles":
+                case 'View all roles':
                     viewRoles();
                     break;
-                case "View all employees":
+                case 'View all employees':
                     viewEmployee();
                     break;
-                case "Add a department":
+                case 'Add a department':
                     addDepartment();
+                    break;
+                case 'Add a role':
+                    addRoles();
                     break;
                     default:
                         console.log('+==============================================+');
@@ -85,7 +88,8 @@ viewRoles = () => {
     const sql = `SELECT department.id, department.name AS department, roles.title AS job_title, roles.salary 
                 FROM roles
                 LEFT JOIN department
-                ON roles.department_id = department.id`;
+                ON roles.department_id = department.id
+                ORDER BY department.id ASC`;
 
     server.query(sql, (err, rows) => {
         if(err) {
@@ -132,14 +136,65 @@ addDepartment = () => {
     .then((data) => {
         const sql = `INSERT INTO department (name)
                 VALUES (?)`
-        server.query(sql, data.newDepartment, (err, results) =>{
+        server.query(sql, [data.newDepartment], (err, results) =>{
             if(err) {
                 console.log(err.message);
                 return;
             }
             console.log('Successfully added new department!');
             promptUser();
-        });
-    });
+        })
+    })
 
 };
+
+addRoles = () => {
+    const departmentChoices = [];
+    const deptSql = `SELECT * FROM department`
+    server.query(deptSql, (err, results) => {
+        if (err) {
+            console.log(err.message);
+            return;
+        }
+        results.forEach(department => {
+            let departmentObj = {
+                name: department.name,
+                value: department.id
+            }
+            departmentChoices.push(departmentObj);
+        })
+    })
+    inquirer.prompt ([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What is the name of the role'
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary of the role'
+        },
+        {
+            type: 'list',
+            name: 'department',
+            message: 'Which department does this role belong to',
+            choices: departmentChoices
+
+        }
+    ])
+    .then((data) => {
+        const sql = `INSERT INTO roles (title, salary, department_id)
+                    VALUES (?,?,?)`
+        server.query(sql, [data.title, data.salary, data.department], (err, results) => {
+            if (err) {
+                console.log(err.message)
+                return;
+            } else {
+                console.log(`Successfully added new role ${data.title}!`);
+                promptUser();
+            }
+        })
+    })
+}
+
