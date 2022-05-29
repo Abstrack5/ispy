@@ -35,7 +35,7 @@ const promptUser = () => {
                     'View all employees',
                     'Add a department',
                     'Add a role',
-                    'Add a employee',
+                    'Add an employee',
                     'Update an Employee role',
                     'Exit']
         }
@@ -56,6 +56,9 @@ const promptUser = () => {
                     break;
                 case 'Add a role':
                     addRoles();
+                    break;
+                case 'Add an employee':
+                    addEmployee();
                     break;
                     default:
                         console.log('+==============================================+');
@@ -193,8 +196,83 @@ addRoles = () => {
             } else {
                 console.log(`Successfully added new role ${data.title}!`);
                 promptUser();
+            };
+        });
+    });
+};
+
+addEmployee = () => {
+    const rolesArr = []
+    const rolesSql = `SELECT * FROM roles`
+    server.query(rolesSql, (err, results) => {
+        if (err) {
+            console.log(err.message);
+            return;
+        } else {
+            results.forEach(role => {
+                let rolesObj = {
+                    name: role.title,
+                    value: role.id
+                }
+                rolesArr.push(rolesObj);                
+            })
+        }
+    })
+    const managerArr = []
+    const employeeSql = `SELECT * FROM employee`
+    server.query(employeeSql, (err, results) => {
+        if (err) {
+            console.log(err.message);
+            return;
+        } else {
+            results.forEach(employee => {
+                let employeeObj = {
+                    name: employee.last_name,
+                    id: employee.manager_id,
+                    value: employee.id
+                }
+                managerArr.push(employeeObj);
+            })
+
+        }
+    })
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'What is the employee first name?',
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the employee last name?'
+        },
+        {
+            type: 'list',
+            name: 'roleTitle',
+            loop: false,
+            message: 'What is the employee role?',
+            choices: rolesArr
+        },
+        {
+            type: 'list',
+            name: 'manager',
+            loop: false,
+            message: 'Who is the manager of the employee?',
+            choices: managerArr
+        }
+
+    ])
+    .then((data) => {
+        const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`
+        server.query(sql, [data.first_name, data.last_name, data.roleTitle, data.manager], (err, rows) => {
+            if (err) {
+                console.log(err.message);
+                return;
+            }  else {
+                console.log('Successfully added new employee!');
+                promptUser();
             }
         })
     })
-}
-
+};
