@@ -18,7 +18,7 @@ The Employee Tracker is a command line application that allows the user to manip
 ## Preview 
 ![screenshot_terminal](https://user-images.githubusercontent.com/100798134/170888298-308f5fec-c788-49fd-8e46-af9ea04919ab.JPG)
 
-##  Copyright (https://img.shields.io/github/license/abstrack5/ispy)
+##  Copyright ![Github](https://img.shields.io/github/license/abstrack5/ispy)
 Copyright (c) 2022 AAhmadi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
