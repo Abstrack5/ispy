@@ -71,7 +71,10 @@ viewDepartments = () => {
 
 viewRoles = () => {
     console.log('Viewing all roles... ');
-    const sql = `SELECT * FROM roles`;
+    const sql = `SELECT department.id, department.name AS department, roles.title AS job_title, roles.salary 
+                FROM roles
+                LEFT JOIN department
+                ON roles.department_id = department.id`;
 
     server.query(sql, (err, rows) => {
         if (err) throw err;
@@ -82,7 +85,15 @@ viewRoles = () => {
 
 viewEmployee = () => {
     console.log('Viewing all Employees... ');
-    const sql = `SELECT * FROM employee`;
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, roles.salary, roles.title AS job_title, department.name AS department,
+                m.last_name AS manager
+                FROM employee
+                LEFT JOIN roles 
+                ON employee.role_id = roles.id
+                LEFT JOIN department
+                ON roles.department_id = department.id
+                LEFT JOIN employee AS m
+                ON m.id = employee.manager_id`;
 
     server.query(sql, (err, rows) => {
         if (err) throw err;
