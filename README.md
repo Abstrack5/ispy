@@ -16,7 +16,7 @@ The Employee Tracker is a command line application that allows the user to manip
  - run npm start
 
 ## Preview 
-View demo [ here ]https://drive.google.com/file/d/1I6RQT-P3JAg5_vvNmYZ_lMafobT7beA_/view
+View demo [ here ](https://drive.google.com/file/d/1I6RQT-P3JAg5_vvNmYZ_lMafobT7beA_/view)
 ![screenshot_terminal](https://user-images.githubusercontent.com/100798134/170888298-308f5fec-c788-49fd-8e46-af9ea04919ab.JPG)
 
 ##  Copyright ![Github](https://img.shields.io/github/license/abstrack5/ispy)
